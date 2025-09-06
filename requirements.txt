@@ -12,3 +12,4 @@ ruff
 mysqlclient
 PyMySQL
 cryptography
+whitenoise
