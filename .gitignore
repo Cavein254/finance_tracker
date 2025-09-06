@@ -18,6 +18,7 @@ db.sqlite3
 # Media and static files (if not served by a separate service)
 media/
 static_collected/
+staticfiles/
 
 # Log files
 *.log

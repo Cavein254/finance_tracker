@@ -127,3 +127,6 @@ CELERY_RESULT_BACKEND = "rpc://"
 # Email settings
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 DEFAULT_FROM_EMAIL = "noreply@financeapp.com"
+
+
+STATIC_ROOT = BASE_DIR / "staticfiles"

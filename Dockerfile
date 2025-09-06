@@ -1,5 +1,5 @@
 # use the official docker image
-FROM python:3.12-slim
+FROM python:3.12-bullseye
 
 # set a directory for the app
 WORKDIR /app
@@ -9,9 +9,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Install system dependencies for mysqlclient
-RUN apt-get update \
-    && apt-get install -y default-libmysqlclient-dev gcc pkg-config \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update \
+#     && apt-get install -y default-libmysqlclient-dev libmariadb-dev gcc pkg-config \
+#     && rm -rf /var/lib/apt/lists/*
 
 # install dependencies
 COPY ./requirements.txt .
