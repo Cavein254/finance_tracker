@@ -1,5 +1,8 @@
-from rest_framework import generics
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework import generics, permissions
 from rest_framework.authtoken.models import Token
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -18,6 +21,23 @@ class RegisterView(generics.CreateAPIView):
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+
+    @swagger_auto_schema(
+        request_body=LoginSerializer,
+        responses={
+            200: openapi.Response(
+                description="Login successful",
+                examples={
+                    "application/json": {
+                        "token": "123abc456def",
+                        "email": "user@example.com",
+                    }
+                },
+            ),
+            400: "Invalid credentials",
+        },
+    )
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -27,5 +47,8 @@ class LoginView(APIView):
 
 
 class UserDetailView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user

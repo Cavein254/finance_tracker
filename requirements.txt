@@ -13,3 +13,4 @@ mysqlclient
 PyMySQL
 cryptography
 whitenoise
+drf-yasg
