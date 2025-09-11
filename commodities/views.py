@@ -1,7 +1,5 @@
 import logging
 
-import pandas as pd
-import yfinance as yt
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -9,6 +7,8 @@ from rest_framework.response import Response
 
 from .models import Commodity, CommodityPriceHistory
 from .serializers import CommodityPriceHistorySerializer, CommoditySerializer
+from .tasks import fetch_commodity_history
+from .utils import fetch_yfinance_data
 
 logger = logging.getLogger(__name__)
 
@@ -32,28 +32,12 @@ class CommodityPriceViewSet(viewsets.ModelViewSet):
         Retrieve 1 year price info
         """
         logger.info(f"Fetching prices for symbol: {symbol}")
-        try:
-            data = yt.download(
-                tickers=symbol,
-                period="1y",
-                interval="1d",
-                group_by="ticker",
-                auto_adjust=True,
-            )
-            if data.empty:
-                return Response(
-                    {"error": "No data found"}, status=status.HTTP_404_NOT_FOUND
-                )
-            else:
-                if isinstance(data.columns, pd.MultiIndex):
-                    data.columns = [
-                        "_".join([str(c) for c in col if c]) for col in data.columns
-                    ]
-                # Reset index so Date becomes a column
-                records = data.reset_index().to_dict(orient="records")
-                return Response(records)
-
-        except Exception as e:
+        data = fetch_yfinance_data(symbol)
+        if data.get("status") is False:
             return Response(
-                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": data.get("message")},
+                status=status.HTTP_404_NOT_FOUND,
             )
+        # enqueue background task for 5 years
+        fetch_commodity_history.delay(symbol)
+        return Response(data.get("data"))

@@ -17,7 +17,7 @@ class Commodity(models.Model):
     commodity_type = models.CharField(
         max_length=50, choices=COMMODITY_TYPES, default="ALTERNATIVE"
     )
-    price = models.DecimalField(max_digits=15, decimal_places=2)
+    price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
