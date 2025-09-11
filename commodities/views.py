@@ -7,6 +7,7 @@ from .serializers import CommodityPriceHistorySerializer, CommoditySerializer
 class CommodityViewSet(viewsets.ModelViewSet):
     queryset = Commodity.objects.all()
     serializer_class = CommoditySerializer
+    lookup_field = "symbol"
 
 
 class CommodityPriceViewSet(viewsets.ModelViewSet):
