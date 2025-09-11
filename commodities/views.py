@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 class CommodityViewSet(viewsets.ModelViewSet):
     queryset = Commodity.objects.all()
     serializer_class = CommoditySerializer
-    lookup_field = "symbol"
     permission_classes = [AllowAny]
 
 
@@ -25,6 +24,7 @@ class CommodityPriceViewSet(viewsets.ModelViewSet):
     queryset = CommodityPriceHistory.objects.all()
     serializer_class = CommodityPriceHistorySerializer
     permission_classes = [AllowAny]
+    lookup_field = "symbol"
 
     @action(detail=True, methods=["get"])
     def prices(self, request, symbol=None):
