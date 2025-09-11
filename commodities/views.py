@@ -36,7 +36,7 @@ class CommodityPriceViewSet(viewsets.ModelViewSet):
             commodity = Commodity.objects.get(symbol=symbol.upper())
             serializer = CommoditySerializer(commodity)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except commodity.DoesNotExist:
+        except Commodity.DoesNotExist:
             # get from the internet
             logger.info(f"Fetching prices for symbol: {symbol}")
             data = fetch_yfinance_data(symbol)

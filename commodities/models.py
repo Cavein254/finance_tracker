@@ -44,10 +44,5 @@ class CommodityPriceHistory(models.Model):
         unique_together = ("commodity", "date")
         ordering = ["-date"]
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.commodity.price = self.close
-        self.commodity.save(update_fields=["price", "updated_at"])
-
     def __str__(self):
         return f"{self.commodity.name} - {self.date}: {self.price}"

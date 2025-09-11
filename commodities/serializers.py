@@ -12,6 +12,7 @@ class CommodityPriceHistorySerializer(serializers.ModelSerializer):
 
 class CommoditySerializer(serializers.ModelSerializer):
     latest_price_history = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Commodity
@@ -32,3 +33,7 @@ class CommoditySerializer(serializers.ModelSerializer):
         if latest:
             return CommodityPriceHistorySerializer(latest).data
         return None
+
+    def get_price(self, obj):
+        latest = obj.price_history.order_by("-date").first()
+        return latest.close if latest else None
