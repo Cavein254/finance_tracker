@@ -14,8 +14,11 @@ class Commodity(models.Model):
     symbol = models.CharField(max_length=10, unique=True)
     description = models.TextField(blank=True, null=True)
     unit = models.CharField(max_length=50, default="unit")
-    current_price = models.DecimalField(max_digits=15, decimal_places=2)
-    last_updated = models.DateTimeField(auto_now=True)
+    commodity_type = models.CharField(
+        max_length=50, choices=COMMODITY_TYPES, default="ALTERNATIVE"
+    )
+    price = models.DecimalField(max_digits=15, decimal_places=2)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name} ({self.symbol})"
@@ -24,3 +27,22 @@ class Commodity(models.Model):
         verbose_name = "Commodity"
         verbose_name_plural = "Commodities"
         ordering = ["name"]
+
+
+class CommodityPriceHistory(models.Model):
+    commodity = models.ForeignKey(
+        Commodity, on_delete=models.CASCADE, related_name="price_history"
+    )
+    date = models.DateField()
+    open = models.DecimalField(max_digits=15, decimal_places=2)
+    high = models.DecimalField(max_digits=15, decimal_places=2)
+    low = models.DecimalField(max_digits=15, decimal_places=2)
+    close = models.DecimalField(max_digits=15, decimal_places=2)
+    volume = models.BigIntegerField()
+
+    class Meta:
+        unique_together = ("commodity", "date")
+        ordering = ["-date"]
+
+    def __str__(self):
+        return f"{self.commodity.name} - {self.date}: {self.price}"
