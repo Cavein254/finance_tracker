@@ -15,3 +15,5 @@ cryptography
 whitenoise
 drf-yasg
 django-environ
+yfinance
+pandas

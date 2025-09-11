@@ -21,7 +21,10 @@ urlpatterns = [
         "api/v1/",
         include(
             [
+                # users
                 path("users/", include("users.urls")),
+                # commodities
+                path("commodities/", include("commodities.urls")),
                 # swagger
                 path(
                     "swagger<format>/",
