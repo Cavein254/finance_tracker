@@ -2,10 +2,10 @@ import logging
 
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import Commodity, CommodityPriceHistory
+from .permissions import ReadOnlyOrAdmin
 from .serializers import CommodityPriceHistorySerializer, CommoditySerializer
 from .tasks import fetch_commodity_history
 from .utils import fetch_yfinance_data
@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 class CommodityViewSet(viewsets.ModelViewSet):
     queryset = Commodity.objects.all()
     serializer_class = CommoditySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [ReadOnlyOrAdmin]
 
 
 class CommodityPriceViewSet(viewsets.ModelViewSet):
     queryset = CommodityPriceHistory.objects.all()
     serializer_class = CommodityPriceHistorySerializer
-    permission_classes = [AllowAny]
+    permission_classes = [ReadOnlyOrAdmin]
     lookup_field = "symbol"
 
     @action(detail=True, methods=["get"])

@@ -45,4 +45,4 @@ class CommodityPriceHistory(models.Model):
         ordering = ["-date"]
 
     def __str__(self):
-        return f"{self.commodity.name} - {self.date}: {self.price}"
+        return f"{self.commodity.name} - {self.date}: {self.close}"
