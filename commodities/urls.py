@@ -5,7 +5,6 @@ from .views import CommodityPriceViewSet, CommodityViewSet
 
 router = DefaultRouter()
 router.register(r"", CommodityViewSet, basename="commodity")
-router.register(r"prices", CommodityPriceViewSet, basename="commodity-price")
 urlpatterns = [
     # This automatically includes the standard CRUD endpoints
     path("", include(router.urls)),

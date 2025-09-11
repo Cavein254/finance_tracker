@@ -3,6 +3,7 @@ import logging
 import pandas as pd
 import yfinance as yt
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -25,6 +26,7 @@ class CommodityPriceViewSet(viewsets.ModelViewSet):
     serializer_class = CommodityPriceHistorySerializer
     permission_classes = [AllowAny]
 
+    @action(detail=True, methods=["get"])
     def prices(self, request, symbol=None):
         """
         Retrieve 1 year price info
@@ -38,7 +40,6 @@ class CommodityPriceViewSet(viewsets.ModelViewSet):
                 group_by="ticker",
                 auto_adjust=True,
             )
-            print("Data fetched:", data)
             if data.empty:
                 return Response(
                     {"error": "No data found"}, status=status.HTTP_404_NOT_FOUND
