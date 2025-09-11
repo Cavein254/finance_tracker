@@ -30,7 +30,7 @@ def fetch_commodity_history(symbol: str):
         logger.info(f"Processing data for symbol: {symbol}")
         # get commodity if available, else create it
         commodity, _ = Commodity.objects.get_or_create(
-            symbol=symbol,
+            symbol=symbol.upper(),
             defaults={
                 "name": symbol,
                 "description": f"Auto-created commodity for {symbol}",

@@ -29,15 +29,22 @@ class CommodityPriceViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["get"])
     def prices(self, request, symbol=None):
         """
-        Retrieve 1 year price info
+        Retrieve commodity data either from the database
+        or internet
         """
-        logger.info(f"Fetching prices for symbol: {symbol}")
-        data = fetch_yfinance_data(symbol)
-        if data.get("status") is False:
-            return Response(
-                {"error": data.get("message")},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        # enqueue background task for 5 years
-        fetch_commodity_history.delay(symbol)
-        return Response(data.get("data"))
+        try:
+            commodity = Commodity.objects.get(symbol=symbol.upper())
+            serializer = CommoditySerializer(commodity)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except commodity.DoesNotExist:
+            # get from the internet
+            logger.info(f"Fetching prices for symbol: {symbol}")
+            data = fetch_yfinance_data(symbol)
+            if data.get("status") is False:
+                return Response(
+                    {"error": data.get("message")},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+            # enqueue background task for 5 years
+            fetch_commodity_history.delay(symbol)
+            return Response(data.get("data"), status=status.HTTP_200_OK)
