@@ -14,3 +14,4 @@ PyMySQL
 cryptography
 whitenoise
 drf-yasg
+django-environ

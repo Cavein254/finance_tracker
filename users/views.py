@@ -32,7 +32,7 @@ class LoginView(APIView):
                 examples={
                     "application/json": {
                         "token": "123abc456def",
-                        "email": "user@example.com",
+                        "email": "cave@cave.com",
                     }
                 },
             ),
