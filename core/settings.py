@@ -1,14 +1,17 @@
 import os
 from pathlib import Path
 
+import dj_database_url
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialise environment variables
+env = environ.Env()
+env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-7eaz@u(xdvvgt)v5@tkp((f^v$&d97472m@6@t(57n0^jm-ptw"
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -67,15 +70,23 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": environ("DB_NAME", default="mydb"),
+#         "USER": environ("DB_USER", default="myuser"),
+#         "PASSWORD": environ("DB_PASSWORD", default="mypassword"),
+#         "HOST": environ("DB_HOST", default="db"),
+#         "PORT": environ("DB_PORT", default="3306"),
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME", "mydb"),
-        "USER": os.getenv("DB_USER", "myuser"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "mypassword"),
-        "HOST": os.getenv("DB_HOST", "db"),
-        "PORT": os.getenv("DB_PORT", "3306"),
-    }
+    "default": dj_database_url.config(
+        default="postgresql://myuser:v1s7gX27fDcw1yZNMf7A4POKFdipL8Gx@dpg-d32510emcj7s739a0i0g-a.ohio-postgres.render.com/mydb_yifp",
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
 # Password validation
@@ -124,7 +135,9 @@ AUTH_USER_MODEL = "users.User"
 
 
 # Celery
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "amqp://guest:guest@rabbitmq:5672//")
+CELERY_BROKER_URL = environ(
+    "CELERY_BROKER_URL", default="amqp://guest:guest@rabbitmq:5672//"
+)
 CELERY_RESULT_BACKEND = "rpc://"
 
 

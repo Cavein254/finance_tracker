@@ -1,15 +1,9 @@
 amqp
-black
 celery
 Django
 django-ip-geolocation
 django-ratelimit
 djangorestframework
-gunicorn
-isort
-pre_commit
-ruff
-mysqlclient
 PyMySQL
 cryptography
 whitenoise
@@ -17,3 +11,5 @@ drf-yasg
 django-environ
 yfinance
 pandas
+dj-database-url
+psycopg2-binary
