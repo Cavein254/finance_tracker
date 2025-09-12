@@ -135,7 +135,7 @@ AUTH_USER_MODEL = "users.User"
 
 
 # Celery
-CELERY_BROKER_URL = environ(
+CELERY_BROKER_URL = env(
     "CELERY_BROKER_URL", default="amqp://guest:guest@rabbitmq:5672//"
 )
 CELERY_RESULT_BACKEND = "rpc://"
