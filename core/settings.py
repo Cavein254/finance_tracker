@@ -1,14 +1,16 @@
 import os
 from pathlib import Path
 
+import environ
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-7eaz@u(xdvvgt)v5@tkp((f^v$&d97472m@6@t(57n0^jm-ptw"
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -70,11 +72,11 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.getenv("DB_NAME", "mydb"),
-        "USER": os.getenv("DB_USER", "myuser"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "mypassword"),
-        "HOST": os.getenv("DB_HOST", "db"),
-        "PORT": os.getenv("DB_PORT", "3306"),
+        "NAME": environ("DB_NAME", defaults="mydb"),
+        "USER": environ("DB_USER", defaults="myuser"),
+        "PASSWORD": environ("DB_PASSWORD", defaults="mypassword"),
+        "HOST": environ("DB_HOST", defaults="db"),
+        "PORT": environ("DB_PORT", defaults="3306"),
     }
 }
 
@@ -124,7 +126,9 @@ AUTH_USER_MODEL = "users.User"
 
 
 # Celery
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "amqp://guest:guest@rabbitmq:5672//")
+CELERY_BROKER_URL = environ(
+    "CELERY_BROKER_URL", defaults="amqp://guest:guest@rabbitmq:5672//"
+)
 CELERY_RESULT_BACKEND = "rpc://"
 
 
