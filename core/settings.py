@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialise environment variables
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 SECRET_KEY = "django-insecure-7eaz@u(xdvvgt)v5@tkp((f^v$&d97472m@6@t(57n0^jm-ptw"
@@ -72,11 +72,11 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": environ("DB_NAME", defaults="mydb"),
-        "USER": environ("DB_USER", defaults="myuser"),
-        "PASSWORD": environ("DB_PASSWORD", defaults="mypassword"),
-        "HOST": environ("DB_HOST", defaults="db"),
-        "PORT": environ("DB_PORT", defaults="3306"),
+        "NAME": environ("DB_NAME", default="mydb"),
+        "USER": environ("DB_USER", default="myuser"),
+        "PASSWORD": environ("DB_PASSWORD", default="mypassword"),
+        "HOST": environ("DB_HOST", default="db"),
+        "PORT": environ("DB_PORT", default="3306"),
     }
 }
 
@@ -127,7 +127,7 @@ AUTH_USER_MODEL = "users.User"
 
 # Celery
 CELERY_BROKER_URL = environ(
-    "CELERY_BROKER_URL", defaults="amqp://guest:guest@rabbitmq:5672//"
+    "CELERY_BROKER_URL", default="amqp://guest:guest@rabbitmq:5672//"
 )
 CELERY_RESULT_BACKEND = "rpc://"
 
