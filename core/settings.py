@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+import dj_database_url
 import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -69,15 +70,23 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": environ("DB_NAME", default="mydb"),
+#         "USER": environ("DB_USER", default="myuser"),
+#         "PASSWORD": environ("DB_PASSWORD", default="mypassword"),
+#         "HOST": environ("DB_HOST", default="db"),
+#         "PORT": environ("DB_PORT", default="3306"),
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": environ("DB_NAME", default="mydb"),
-        "USER": environ("DB_USER", default="myuser"),
-        "PASSWORD": environ("DB_PASSWORD", default="mypassword"),
-        "HOST": environ("DB_HOST", default="db"),
-        "PORT": environ("DB_PORT", default="3306"),
-    }
+    "default": dj_database_url.config(
+        default="postgresql://myuser:v1s7gX27fDcw1yZNMf7A4POKFdipL8Gx@dpg-d32510emcj7s739a0i0g-a.ohio-postgres.render.com/mydb_yifp",
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
 # Password validation
